@@ -450,6 +450,15 @@
              */
             #define MD_GET_SP(_t) (*(long *)(((char *)&(_t)->context[0].__jmpbuf[0]) + 76))
 
+        #elif defined(__aarch64__) || defined(__arm64__)
+            #define MD_STACK_GROWS_DOWN
+            #define MD_USE_BUILTIN_SETJMP
+
+            #ifndef JB_SP
+                #define JB_SP 12
+            #endif
+            #define MD_GET_SP(_t) (_t)->context[0].__jmpbuf[JB_SP]
+
         #else
             #error "Unknown CPU architecture"
         #endif /* Cases with common MD_INIT_CONTEXT and different SP locations */
